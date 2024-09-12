@@ -1,6 +1,6 @@
 **5.4.1 - Calling Functions**
 
-Use the numpy package [(Docs)](https://numpy.org/doc/stable/reference/random/generated/numpy.random.normal.html) [(Example)](https://www.w3schools.com/python/numpy/numpy_random_normal.asp) to sample the normal distribution a certain number of times.
+Use the numpy package [(Docs)](https://numpy.org/doc/stable/reference/random/generated/numpy.random.normal.html) [(Example)]( ://www.w3schools.com/python/numpy/numpy_random_normal.asp) to sample the normal distribution a certain number of times.
 The number of samples is selectable by you. After sampling the distribution, use the [mean()](https://numpy.org/doc/stable/reference/generated/numpy.mean.html) and [std()](https://numpy.org/doc/stable/reference/generated/numpy.std.html) methods
 built in to numpy to check the mean and std of the samples match the original distribution.
 

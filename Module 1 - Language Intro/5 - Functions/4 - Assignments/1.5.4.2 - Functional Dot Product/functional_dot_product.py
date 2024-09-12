@@ -20,9 +20,13 @@ def dot_product(a,b):
 
     ### YOUR CODE HERE ###
 
+    dot = 0
+    for i, values in enumerate(a, 0):
+        cur = a[i] * b[i]
+        dot += cur
 
     ### CHANGE THIS RETURN VALUE. IT IS HERE SO THE CODE DOES NOT ERROR
-    return None
+    return dot
 
 """
 Step 1: Generate two "vectors" of equal length but full of random values
@@ -46,6 +50,7 @@ true_result = np.dot(vector_a,vector_b)
 """
 Step 4: See if you're correct....
 """
+
 if result is None:
     print("Result is None. You didn't change the result statement in the function")
 

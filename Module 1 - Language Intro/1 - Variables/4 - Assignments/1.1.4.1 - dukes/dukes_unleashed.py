@@ -10,6 +10,14 @@ Note: this problem does not require the "compounding interest" formula from the 
 
 ### Your code here ###
 
-in_state_gift = 0
+in_state_cost = 30792.00
+out_state_cost = 47882.00
 
-out_state_gift = 0
+return_rate = 0.05
+
+in_state_gift = in_state_cost / return_rate
+out_state_gift = out_state_cost / return_rate
+
+print("Amount required for in-state: $", str(in_state_gift))
+print("Amount required for out of-state: $",str(out_state_gift))
+
