@@ -17,6 +17,7 @@ Using Wearable Sensors](https://www.jasonforsyth.net/pdf/mitchell-sieds-camera-r
 
 **7.4.2 - Tensile Strength Testing**
 
+
 Complete several templates to implement various tensile testing methods. Each template should be completed in order as they build upon one another.
 
 A: Complete the template to calculate stress from load/force and cross-section area
