@@ -3,25 +3,30 @@ import sys
 
 def sliding_window(datas):
 
-    windowWidth = 6
+    # Define the width of the window (6 because it is a 7-day period)
+    WINDOW_WIDTH = 6
 
     # I looked this up because I figured there was a more "pythonny" way to find the sum of a list than
     # doing some sort of total = 0, total += data[3] in a for loop
     # https://stackoverflow.com/questions/638048/how-do-i-sum-the-first-value-in-each-tuple-in-a-list-of-tuples-in-python#638055
-    windowSum = sum(data[3] for data in datas[:windowWidth])
+    windowSum = sum(data[3] for data in datas[:WINDOW_WIDTH])
+
+    # Set initial conditions so the function doesn't throw an error in the case that the max window size
+    # is the first WINDOW_WIDTH days
     maxWindowSum = windowSum
+    windowStartDate = datas[0][0]
 
     # After getting the initial windowSum, start the sliding window by
     # subtracting the element leaving the window and adding the element entering the window
     # avoiding a nested loop
-    for i in range(windowWidth, len(datas) - windowWidth):
+    for i in range(WINDOW_WIDTH, len(datas) - WINDOW_WIDTH):
 
-        # The range based for loop is inclusive so I am starting at the windowWidth element, which has already
+        # The range based for loop is inclusive so I am starting at the WINDOW_WIDTH element, which has already
         # been accounted for in the initial windowSum, so I have to subtract it
         windowSum -= datas[i][3]
 
         # Then add the new element that is exactly one width away from the one we just subtracted
-        windowSum += datas[i + windowWidth][3]
+        windowSum += datas[i + WINDOW_WIDTH][3]
 
         # If the current window is the biggest we've seen, store the starting data and value
         if windowSum > maxWindowSum:
@@ -102,9 +107,8 @@ def first_question(harrisonburgData, rockinghamData):
 
     # Because it is already sorted in ascending data, the first positive case
     # for each will be the 0th element of the first tuple
-
-    print(f"First Harrisonburg positive case: {harrisonburgData[0][0]}")
-    print(f"First Rockingham County positive case: {rockinghamData[0][0]}")
+    print(f"\nHarrisonburg: First positive case was on {harrisonburgData[0][0]}")
+    print(f"Rockingham County: First positive case was on {rockinghamData[0][0]}")
 
     # your code here
     return
@@ -118,19 +122,26 @@ def second_question(harrisonburgData, rockinghamData):
     :return:
     """
 
+    # set Initial conditions so I can compare in the following for loop
     maxHarrisonburgCases = 0
     maxRockinghamCases = 0
 
 
-    for info in harrisonburgData:
-        if info[3] > maxHarrisonburgCases:
-            maxHarrisonburgCases = info[3]
-            maxHarrisonburgCasesDate = info[0]
+    # Compare the number of daily cases for each day in both data sets
+    for data in harrisonburgData:
 
-    for info in rockinghamData:
-        if info[3] > maxRockinghamCases:
-            maxRockinghamCases = info[3]
-            maxRockinghamCasesDate = info[0]
+        # and if the daily cases is a new max, then reassign the maxCases and grab the date as well
+        if data[3] > maxHarrisonburgCases:
+            maxHarrisonburgCases = data[3]
+            maxHarrisonburgCasesDate = data[0]
+
+    # Repeat for Rockingham County data
+    for data in rockinghamData:
+        if data[3] > maxRockinghamCases:
+            maxRockinghamCases = data[3]
+            maxRockinghamCasesDate = data[0]
+
+
 
     print(f"\nHarrisonburg: Max daily cases was {maxHarrisonburgCases} on {maxHarrisonburgCasesDate}")
     print(f"Rockingham County: Max daily cases was {maxRockinghamCases} on {maxRockinghamCasesDate}\n")
@@ -144,9 +155,11 @@ def third_question(harrisonburgData, rockinghamData):
     # What was the worst 7-day period in either the city and county for new COVID cases?
     # This is the 7-day period where the number of new cases was maximal.
 
+    # Call the sliding_window function to get the max 7-day period for Harrisonburg and Rockingham County
     harrisonburgMaxWindow, harrisonburgWindowStart = sliding_window(harrisonburgData)
     rockinghamMaxWindow, rockinghamWindowStart = sliding_window(rockinghamData)
 
+    # Compare the outputs of the sliding_window function to know which area had a worse 7-day period
     if harrisonburgMaxWindow > rockinghamMaxWindow:
         maxWindow = harrisonburgMaxWindow
         windowStart = harrisonburgWindowStart
@@ -156,6 +169,7 @@ def third_question(harrisonburgData, rockinghamData):
         windowStart = rockinghamWindowStart
         location = "Rockingham County"
 
+
     print(f"Worst seven day period was in {location}, beginning on {windowStart}, and had {maxWindow} new cases.")
     return
 
@@ -164,9 +178,14 @@ if __name__ == "__main__":
 
     data = parse_nyt_data('us-counties.csv')
 
+    # Create lists to contain just the Harrisonbug Data and just the Rockingham County Data
     harrisonburgData = []
     rockinghamData = []
 
+    # Check the City/County AND the State column to make sure it is what we are looking for
+    # and the add that tuple to its respective list
+    # I am doing this in main to avoid having to parse through the entire data set for each question
+    # and I changed the parameters for each function to accept the Harrisonburg and Rockingham County lists
     for info in data:
         if (info[1] == "Harrisonburg city" and info[2] == "Virginia"):
             harrisonburgData.append(info)
