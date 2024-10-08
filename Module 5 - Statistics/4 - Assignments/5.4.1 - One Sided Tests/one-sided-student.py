@@ -35,6 +35,22 @@ def one_sided_tests(_files: list, _mean: float, _alpha: float, _less_than: bool)
     reject_null_hypothesis = []
 
     # YOUR CODE HERE #
+    data = []
+
+    for file in _files:
+
+        #Store each csv file as np array in data list
+        data = np.loadtxt(file, dtype=float)
+
+        if _less_than == True:
+            alt = 'less'
+        else:
+            alt = 'greater'
+
+        stat, p_value = ttest_1samp(data, popmean=_mean, alternative=alt)
+
+        if p_value < _alpha:
+            reject_null_hypothesis.append(file)
 
     # return samples that were rejected
     return reject_null_hypothesis
@@ -61,6 +77,7 @@ if __name__ == "__main__":
     # generate two distributions that should have mean that is greater than
     greater_than_distribution_one = np.random.normal(loc=target_mu + (0.5), scale=target_std, size=num_samples)
     greater_than_distribution_two = np.random.normal(loc=target_mu + (1.0), scale=target_std, size=num_samples)
+    fake_greater_than_distribution = np.random.normal(loc=target_mu - (0.5), scale=target_std, size=num_samples)
 
     # write samples to files
     write_to_csv('base1.txt', base_distribution_one)
@@ -69,9 +86,10 @@ if __name__ == "__main__":
     write_to_csv('lesser2.txt', less_than_distribution_two)
     write_to_csv('greater1.txt', greater_than_distribution_one)
     write_to_csv('greater2.txt', greater_than_distribution_two)
+    write_to_csv('fake_greater.txt', fake_greater_than_distribution)
 
     # place one-sided test files in a list
-    one_sided_test_files = ['lesser1.txt', 'lesser2.txt', 'greater1.txt', 'greater2.txt']
+    one_sided_test_files = ['lesser1.txt', 'lesser2.txt', 'greater1.txt', 'greater2.txt', 'fake_greater.txt']
 
     # perform all left-sided tests (rejected should be less than target as means not equal)
     left_sided_tests = one_sided_tests(_files=one_sided_test_files, _mean=target_mu, _alpha=0.5, _less_than=True)
