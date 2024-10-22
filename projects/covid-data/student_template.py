@@ -18,11 +18,11 @@ def sliding_window(datas):
     # After getting the initial windowSum, start the sliding window by
     # subtracting the element leaving the window and adding the element entering the window
     # avoiding a nested loop
-    for i in range(WINDOW_WIDTH, len(datas) - WINDOW_WIDTH):
+    for i in range(1, len(datas) - WINDOW_WIDTH):
 
         # The range based for loop is inclusive so I am starting at the WINDOW_WIDTH element, which has already
         # been accounted for in the initial windowSum, so I have to subtract it
-        windowSum -= datas[i][0]
+        windowSum -= datas[i - 1][0]
 
         # Then add the new element that is exactly one width away from the one we just subtracted
         windowSum += datas[i + WINDOW_WIDTH][0]
@@ -33,7 +33,7 @@ def sliding_window(datas):
 
             # The start of the window is i + i because we are removing the i'th element from the window
             # in the previous step
-            windowStartDate = datas[i + 1][1]
+            windowStartDate = datas[i][1]
 
     return maxWindowSum, windowStartDate
 

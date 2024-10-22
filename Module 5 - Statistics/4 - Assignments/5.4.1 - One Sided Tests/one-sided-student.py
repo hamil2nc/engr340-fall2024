@@ -3,14 +3,17 @@ from scipy.stats import ttest_1samp, norm, ttest_ind
 
 
 def write_to_csv(filename: str, data):
+
     """
     Write an array of data to a file
     :param filename: Name of file to be written
     :param data: An array type object for data to be written to file
     :return: None
     """
+
     try:
         file = open(filename, 'w')
+
     except FileNotFoundError:
         print('Could not open file ', filename, ' error!!')
         return
@@ -21,7 +24,8 @@ def write_to_csv(filename: str, data):
     file.close()
 
 
-def one_sided_tests(_files: list, _mean: float, _alpha: float, _less_than: bool):
+def one_sample_tests(_files: list, _mean: float, _alpha: float, _less_than: bool):
+
     """
     Conduct a one-sided t-test, either left or ride sided. Null hypothesis is the means are equal.
     :param _files: List of files to be tested. Assume they can be loaded directly as a numpy array
@@ -92,10 +96,9 @@ if __name__ == "__main__":
     one_sided_test_files = ['lesser1.txt', 'lesser2.txt', 'greater1.txt', 'greater2.txt', 'fake_greater.txt']
 
     # perform all left-sided tests (rejected should be less than target as means not equal)
-    left_sided_tests = one_sided_tests(_files=one_sided_test_files, _mean=target_mu, _alpha=0.5, _less_than=True)
+    left_sided_tests = one_sample_tests(_files=one_sided_test_files, _mean=target_mu, _alpha=0.5, _less_than=True)
     print('Conducting left sided tests. All samples less that mean should be returned. Samples: ', left_sided_tests)
 
     # perform all left-sided tests (rejected should be greater than target as means not equal)
-    right_sided_tests = one_sided_tests(_files=one_sided_test_files, _mean=target_mu, _alpha=0.5, _less_than=False)
+    right_sided_tests = one_sample_tests(_files=one_sided_test_files, _mean=target_mu, _alpha=0.5, _less_than=False)
     print('Conducting right sided tests. All samples greater that mean should be returned. Samples: ', right_sided_tests)
-
