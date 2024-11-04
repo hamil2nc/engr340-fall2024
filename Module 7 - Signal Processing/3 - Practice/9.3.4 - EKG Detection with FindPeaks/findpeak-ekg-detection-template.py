@@ -23,7 +23,7 @@ Step 2: Determine how much data to use...
 """
 # If you wish to only run on ~10s of data uncomment the line below
 # if you wish to run on all data, comment out this line
-signal = signal[0:3300]
+signal = signal[0:5300]
 
 
 """
@@ -31,7 +31,9 @@ Step 3: Use Find Peaks
 """
 
 # you may want to explore various parameters for the function that will help you!
-peaks, _ = find_peaks(signal)
+# Distance 67 is equal to 200 ms, from the Pan-Tompkins paper
+# Height of 1.5 was determined by visually inspecting the plot
+peaks, _ = find_peaks(signal, height=1.5, distance=67)
 print("Within the sample we found ", len(peaks), " heart beats with find_peaks!")
 
 """

@@ -16,7 +16,7 @@ path_to_folder = "../../../data/ekg/"
 signal_filepath = path_to_folder + database_name + ".csv"
 
 #sample size so entire thing is not graphed making it easier to look at
-sample_size = 3500
+sample_size = 50000
 
 """
 Step #1: load data in matrix from CSV file; skip first two rows. Call the data signal.
@@ -38,7 +38,7 @@ Step 2: (OPTIONAL) pass data through LOW PASS FILTER (fs=250Hz, fc=15, N=6). The
 # https://dsp.stackexchange.com/questions/49460/apply-low-pass-butterworth-filter-in-python
 # user jojeck's reply was helpful
 fs, fc, N = 250, 15, 6
-b, a = butter(N, fc / (fs / 2), 'lowpass')
+b, a = butter(N, 2* fc / fs, 'lowpass')
 filtered_voltage = filtfilt(b, a, voltage)
 
 plt.title('Filtered Signal for ' + database_name)

@@ -23,7 +23,7 @@ Step 2: Determine how much data to use...
 """
 # If you wish to only run on ~10s of data uncomment the line below
 # if you wish to run on all data, comment out this line
-signal = signal[0:3300]
+signal = signal[0:5300]
 
 
 """
@@ -32,15 +32,20 @@ Adjust the values for threshold and timeout to change the detection method/appro
 """
 
 # set a detection threshold (YOUR VALUE BELOW)
-detection_threshold = -1
+detection_threshold = 1.5
 
 # set a heart beat time out (YOUR VALUE BELOW)
-detection_time_out = -1
+
+sampling_rate_ms = 3
+# From Pan-Tompkins paper
+desired_time_out_ms = 200
+# Force it to be an int because we are using it to increment an index
+detection_time_out = int(desired_time_out_ms / sampling_rate_ms)
 
 # track the last time we found a beat
 last_detected_index = -1
 
-# keep not of where we are in the data
+# keep note of where we are in the data
 current_index = 0
 
 # store indices of all found beats
@@ -54,6 +59,18 @@ Step 4: Manually iterate through the signal and apply the threshold with timeout
 for value in signal:
     ## Use a conditional statement to see if the signal is above a threshold...
 
+    # If the detected beat is less than one detection_time_out from the previous, skip it
+    # Timeout of 67 was used because with our sampling rate, that is ~200 ms as outlined in
+    # Pan-Tompkins paper
+    if len(beats_detected) > 0:
+        if current_index < beats_detected[-1] + detection_time_out:
+            # Increment index and go to the next value in signal
+            current_index += 1
+            continue
+
+    # If it is above the threshold and at least 200 ms from previous
+    if value > detection_threshold:
+        beats_detected.append(current_index)
     ## Once an index is found, place the index in the beats_detected list
     current_index += 1
 
