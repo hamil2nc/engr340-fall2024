@@ -1,5 +1,6 @@
 import numpy as np
 from ekg_testbench import EKGTestBench
+from scipy.signal import butter, filtfilt, find_peaks
 
 def detect_heartbeats(filepath):
     """
@@ -15,36 +16,42 @@ def detect_heartbeats(filepath):
     path = filepath
 
     # load data in matrix from CSV file; skip first two rows
-    ## your code here
+    data = np.loadtxt(signal_filepath, delimiter=',', skiprows=2)
 
     # save each vector as own variable
-    ## your code here
+    elapsed_time = data[:,0]
+    MLII = data[:,1]
+    V1 = data[:,2]
 
     # identify one column to process. Call that column signal
 
-    signal = -1 ## your code here
+    signal = V1
 
     # pass data through LOW PASS FILTER (OPTIONAL)
-    ## your code here
+    fs, fc, N = 250, 15, 6
+    b, a = butter(N, 2 * fc / fs, 'lowpass')
+    signal = filtfilt(b, a, V1)
 
     # pass data through HIGH PASS FILTER (OPTIONAL) to create BAND PASS result
     ## your code here
 
     # pass data through differentiator
-    ## your code here
+    signal = np.diff(signal)
 
     # pass data through square function
-    ## your code here
+    signal = np.square(signal)
 
     # pass through moving average window
-    ## your code here
+    window_size = 10
+    window_array = np.ones(window_size, dtype=int)
+    signal = np.convolve(signal, window_array)
 
     # use find_peaks to identify peaks within averaged/filtered data
     # save the peaks result and return as part of testbench result
 
-    ## your code here peaks,_ = find_peaks(....)
+    peaks, _ = find_peaks(signal, height=0.015, distance=67)
 
-    beats = None
+    beats = peaks
 
     # do not modify this line
     return signal, beats
@@ -57,7 +64,7 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
     # database name
-    database_name = 'mitdb_201'
+    database_name = 'mitdb_219'
 
     # set to true if you wish to generate a debug file
     file_debug = False
