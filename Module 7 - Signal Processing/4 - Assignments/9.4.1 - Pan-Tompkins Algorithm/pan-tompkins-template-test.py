@@ -1,6 +1,6 @@
 import numpy as np
 from ekg_testbench import EKGTestBench
-from scipy.signal import filtfilt, butter, find_peaks
+from scipy.signal import butter, filtfilt, find_peaks
 
 def detect_heartbeats(filepath):
     """
@@ -16,7 +16,7 @@ def detect_heartbeats(filepath):
     path = filepath
 
     # load data in matrix from CSV file; skip first two rows
-    data = np.loadtxt(path, delimiter=',', skiprows=2)
+    data = np.loadtxt(signal_filepath, delimiter=',', skiprows=2)
 
     # save each vector as own variable
     elapsed_time = data[:,0]
@@ -63,8 +63,12 @@ if __name__ == "__main__":
     # place here so doesn't cause import error
     import matplotlib.pyplot as plt
 
+    # data_sets = ["mitdb_100","mitdb_102","mitdb_103","mitdb_104",
+                  # "mitdb_107","mitdb_201","mitdb_213","mitdb_219",
+                 # "mitdb_220","nstdb_118e00","nstdb_118e06","qtdb_sel104"]
+
     # database name
-    database_name = 'mitdb_219'
+    database_name = 'mitdb_103'
 
     # set to true if you wish to generate a debug file
     file_debug = False
@@ -80,7 +84,6 @@ if __name__ == "__main__":
     # path to ekg folder
     path_to_folder = "../../../data/ekg/"
 
-    # select a signal file to run
     signal_filepath = path_to_folder + database_name + ".csv"
 
     # call main() and run against the file. Should return the filtered
